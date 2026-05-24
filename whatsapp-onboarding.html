@@ -1,0 +1,947 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WhatsApp Business Onboarding</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --green: #25D366;
+    --green-dark: #128C7E;
+    --green-light: #DCF8C6;
+    --bg: #0a0f0d;
+    --surface: #111a16;
+    --surface2: #1a2820;
+    --border: #253d30;
+    --text: #e8f5ee;
+    --text-muted: #7aab8a;
+    --mono: 'DM Mono', monospace;
+    --sans: 'Syne', sans-serif;
+    --radius: 12px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: var(--sans);
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(37,211,102,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(37,211,102,0.04) 1px, transparent 1px);
+    background-size: 48px 48px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .container {
+    position: relative;
+    z-index: 1;
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 40px 24px 80px;
+  }
+
+  header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 60px;
+  }
+
+  .logo-icon {
+    width: 48px; height: 48px;
+    background: var(--green);
+    border-radius: 14px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 24px;
+    box-shadow: 0 0 24px rgba(37,211,102,0.4);
+  }
+
+  .logo-text {
+    font-size: 22px;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+    color: var(--text);
+  }
+
+  .logo-text span { color: var(--green); }
+
+  .badge {
+    margin-left: auto;
+    padding: 4px 12px;
+    background: rgba(37,211,102,0.1);
+    border: 1px solid var(--border);
+    border-radius: 100px;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--green);
+    font-family: var(--mono);
+    letter-spacing: 0.5px;
+  }
+
+  .hero {
+    text-align: center;
+    margin-bottom: 56px;
+  }
+
+  .hero h1 {
+    font-size: clamp(36px, 6vw, 64px);
+    font-weight: 800;
+    line-height: 1.05;
+    letter-spacing: -2px;
+    margin-bottom: 16px;
+  }
+
+  .hero h1 em {
+    font-style: normal;
+    color: var(--green);
+    position: relative;
+  }
+
+  .hero h1 em::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 3px;
+    background: var(--green);
+    border-radius: 2px;
+    opacity: 0.4;
+  }
+
+  .hero p {
+    font-size: 18px;
+    color: var(--text-muted);
+    max-width: 520px;
+    margin: 0 auto;
+    line-height: 1.6;
+    font-weight: 400;
+  }
+
+  .config-panel {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 32px;
+    margin-bottom: 32px;
+  }
+
+  .config-panel h2 {
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    font-family: var(--mono);
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .config-panel h2::before {
+    content: '01';
+    color: var(--green);
+  }
+
+  .fields-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+
+  @media (max-width: 600px) {
+    .fields-grid { grid-template-columns: 1fr; }
+  }
+
+  .field {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .field label {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-muted);
+    font-family: var(--mono);
+    letter-spacing: 0.3px;
+  }
+
+  .field input {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px 14px;
+    color: var(--text);
+    font-family: var(--mono);
+    font-size: 13px;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+
+  .field input:focus {
+    border-color: var(--green);
+    box-shadow: 0 0 0 3px rgba(37,211,102,0.12);
+  }
+
+  .field input::placeholder { color: #3d5a47; }
+
+  .launch-section {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    margin-bottom: 40px;
+    flex-wrap: wrap;
+  }
+
+  .btn-launch {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 18px 36px;
+    background: var(--green);
+    color: #0a0f0d;
+    border: none;
+    border-radius: var(--radius);
+    font-family: var(--sans);
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: transform 0.15s, box-shadow 0.15s, background 0.15s;
+    box-shadow: 0 0 32px rgba(37,211,102,0.35);
+    letter-spacing: -0.3px;
+  }
+
+  .btn-launch:hover {
+    background: #20c95e;
+    transform: translateY(-2px);
+    box-shadow: 0 0 48px rgba(37,211,102,0.5);
+  }
+
+  .btn-launch:active { transform: translateY(0); }
+  .btn-launch svg { flex-shrink: 0; }
+
+  .btn-launch.loading {
+    opacity: 0.7;
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+
+  .btn-demo {
+    padding: 18px 28px;
+    background: transparent;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    color: var(--text-muted);
+    font-family: var(--sans);
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+
+  .btn-demo:hover {
+    border-color: var(--green);
+    color: var(--green);
+    background: rgba(37,211,102,0.05);
+  }
+
+  .results-panel {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    overflow: hidden;
+    display: none;
+    animation: slideIn 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .results-panel.visible { display: block; }
+
+  @keyframes slideIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .results-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 20px 28px;
+    border-bottom: 1px solid var(--border);
+    background: var(--surface2);
+  }
+
+  .status-dot {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    background: var(--green);
+    box-shadow: 0 0 8px var(--green);
+    flex-shrink: 0;
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+  }
+
+  .status-dot.error { background: #ff5757; box-shadow: 0 0 8px #ff5757; animation: none; }
+  .status-dot.pending { background: #ffa500; box-shadow: 0 0 8px #ffa500; }
+
+  .results-header h3 {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text);
+  }
+
+  .results-header .ts {
+    margin-left: auto;
+    font-size: 11px;
+    font-family: var(--mono);
+    color: var(--text-muted);
+  }
+
+  .cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 16px;
+    padding: 28px;
+  }
+
+  .card {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px;
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.2s;
+  }
+
+  .card:hover { border-color: var(--green); }
+
+  .card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--green), transparent);
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
+
+  .card:hover::before { opacity: 1; }
+
+  .card-label {
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--text-muted);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    font-family: var(--mono);
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .card-value {
+    font-family: var(--mono);
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--green);
+    word-break: break-all;
+    line-height: 1.5;
+  }
+
+  .card-value.empty { color: #3d5a47; font-style: italic; }
+
+  .copy-btn {
+    position: absolute;
+    top: 12px; right: 12px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 4px 8px;
+    font-size: 10px;
+    color: var(--text-muted);
+    cursor: pointer;
+    font-family: var(--mono);
+    transition: all 0.15s;
+    opacity: 0;
+  }
+
+  .card:hover .copy-btn { opacity: 1; }
+  .copy-btn:hover { color: var(--green); border-color: var(--green); }
+  .copy-btn.copied { color: var(--green); border-color: var(--green); }
+
+  .raw-section {
+    border-top: 1px solid var(--border);
+    padding: 24px 28px;
+  }
+
+  .raw-toggle {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-muted);
+    font-family: var(--mono);
+    margin-bottom: 16px;
+    user-select: none;
+    transition: color 0.15s;
+  }
+
+  .raw-toggle:hover { color: var(--green); }
+
+  .raw-toggle .chevron {
+    transition: transform 0.2s;
+    display: inline-block;
+  }
+
+  .raw-toggle.open .chevron { transform: rotate(90deg); }
+
+  pre.raw-json {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 20px;
+    font-family: var(--mono);
+    font-size: 12px;
+    line-height: 1.7;
+    color: var(--text-muted);
+    overflow-x: auto;
+    display: none;
+  }
+
+  pre.raw-json.visible { display: block; }
+
+  .raw-json .key { color: #7aab8a; }
+  .raw-json .str { color: #a8e6c0; }
+  .raw-json .num { color: var(--green); }
+
+  .steps-row {
+    display: flex;
+    gap: 0;
+    margin-bottom: 40px;
+    overflow-x: auto;
+  }
+
+  .step {
+    flex: 1;
+    min-width: 140px;
+    padding: 16px;
+    border-right: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    position: relative;
+    background: var(--surface);
+  }
+
+  .step:first-child { border-radius: 16px 0 0 16px; border: 1px solid var(--border); border-right: none; }
+  .step:last-child { border-radius: 0 16px 16px 0; border: 1px solid var(--border); }
+  .step:not(:first-child):not(:last-child) { border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+
+  .step.active { background: rgba(37,211,102,0.06); }
+  .step.done { background: rgba(37,211,102,0.04); }
+
+  .step-num {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text-muted);
+    font-family: var(--mono);
+  }
+
+  .step.active .step-num, .step.done .step-num { color: var(--green); }
+
+  .step-title {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--text);
+  }
+
+  .step-desc {
+    font-size: 11px;
+    color: var(--text-muted);
+    line-height: 1.4;
+  }
+
+  .toast {
+    position: fixed;
+    bottom: 32px;
+    right: 32px;
+    background: var(--surface2);
+    border: 1px solid var(--green);
+    border-radius: 10px;
+    padding: 12px 20px;
+    font-size: 13px;
+    color: var(--green);
+    font-family: var(--mono);
+    transform: translateY(80px);
+    opacity: 0;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    z-index: 100;
+    max-width: 360px;
+  }
+
+  .toast.show { transform: translateY(0); opacity: 1; }
+  .toast.error { border-color: #ff5757; color: #ff5757; }
+
+  .instructions {
+    background: rgba(37,211,102,0.04);
+    border: 1px solid rgba(37,211,102,0.2);
+    border-radius: 12px;
+    padding: 20px 24px;
+    margin-bottom: 32px;
+    font-size: 13px;
+    color: var(--text-muted);
+    line-height: 1.7;
+    font-family: var(--mono);
+  }
+
+  .instructions strong { color: var(--green); font-weight: 600; }
+  .instructions a { color: var(--green); text-decoration: none; }
+  .instructions a:hover { text-decoration: underline; }
+
+  .warn-box {
+    background: rgba(255, 165, 0, 0.05);
+    border: 1px solid rgba(255, 165, 0, 0.2);
+    border-radius: 12px;
+    padding: 16px 20px;
+    margin-bottom: 24px;
+    font-size: 12px;
+    color: #c4a35a;
+    font-family: var(--mono);
+    line-height: 1.6;
+  }
+
+  .backend-url-row {
+    margin-bottom: 20px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--border);
+  }
+</style>
+</head>
+<body>
+
+<!-- Facebook JS SDK -->
+<script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js"></script>
+
+<div class="container">
+
+  <header>
+    <div class="logo-icon">💬</div>
+    <div class="logo-text">WA<span>Onboard</span></div>
+    <span class="badge">v4 · Embedded Signup</span>
+  </header>
+
+  <div class="hero">
+    <h1>Onboard Businesses to<br><em>WhatsApp</em> in Minutes</h1>
+    <p>Enter your Meta App credentials, launch Embedded Signup, and the account gets saved to your database automatically.</p>
+  </div>
+
+  <!-- Flow steps -->
+  <div class="steps-row" id="stepsRow">
+    <div class="step active" id="step1">
+      <span class="step-num">01</span>
+      <span class="step-title">Configure</span>
+      <span class="step-desc">Enter App ID &amp; credentials</span>
+    </div>
+    <div class="step" id="step2">
+      <span class="step-num">02</span>
+      <span class="step-title">Launch Flow</span>
+      <span class="step-desc">Customer signs in via Meta</span>
+    </div>
+    <div class="step" id="step3">
+      <span class="step-num">03</span>
+      <span class="step-title">Capture IDs</span>
+      <span class="step-desc">WABA ID, phone ID, biz ID</span>
+    </div>
+    <div class="step" id="step4">
+      <span class="step-num">04</span>
+      <span class="step-title">Save to DB</span>
+      <span class="step-desc">Token exchanged &amp; stored</span>
+    </div>
+    <div class="step" id="step5">
+      <span class="step-num">05</span>
+      <span class="step-title">Ready</span>
+      <span class="step-desc">Account saved in Supabase</span>
+    </div>
+  </div>
+
+  <!-- Config -->
+  <div class="config-panel">
+    <h2>Configuration</h2>
+
+    <div class="warn-box">
+      ⚠️ Your Meta App must have completed App Review for <code>whatsapp_business_management</code> and <code>whatsapp_business_messaging</code> permissions, and must be registered as a Tech Provider or Solution Partner.
+    </div>
+
+    <!-- Backend URL -->
+    <div class="backend-url-row">
+      <div class="field">
+        <label for="backendUrl">Backend URL (your deployed server)</label>
+        <input type="text" id="backendUrl" placeholder="https://your-app.up.railway.app" value="" />
+      </div>
+    </div>
+
+    <div class="fields-grid">
+      <div class="field">
+        <label for="appId">App ID</label>
+        <input type="text" id="appId" placeholder="e.g. 21202248997039" />
+      </div>
+      <div class="field">
+        <label for="configId">Configuration ID (Facebook Login for Business)</label>
+        <input type="text" id="configId" placeholder="e.g. 1234567890" />
+      </div>
+      <div class="field">
+        <label for="apiVersion">Graph API Version</label>
+        <input type="text" id="apiVersion" value="v25.0" />
+      </div>
+      <div class="field">
+        <label for="appSecret">App Secret</label>
+        <input type="password" id="appSecret" placeholder="Your Meta App Secret" />
+      </div>
+    </div>
+  </div>
+
+  <!-- Launch -->
+  <div class="launch-section">
+    <button class="btn-launch" onclick="launchWhatsAppSignup()" id="launchBtn">
+      <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
+        <path d="M11 2C6.03 2 2 6.03 2 11s4.03 9 9 9 9-4.03 9-9-4.03-9-9-9zm4.5 9.75l-6 3.5A.75.75 0 018 14.5v-7a.75.75 0 011.5-.65l6 3.5a.75.75 0 010 1.3z" fill="#0a0f0d"/>
+      </svg>
+      Connect WhatsApp Business
+    </button>
+    <button class="btn-demo" onclick="simulateDemo()">
+      ⚡ Simulate Demo Flow
+    </button>
+  </div>
+
+  <!-- Instructions -->
+  <div class="instructions">
+    <strong>How this works:</strong><br>
+    1. Fill in your <strong>Backend URL</strong>, <strong>App ID</strong>, <strong>App Secret</strong>, and <strong>Configuration ID</strong>.<br>
+    2. Click <strong>Connect WhatsApp Business</strong> — the Embedded Signup popup launches.<br>
+    3. Complete the Meta login flow to select/create a WhatsApp Business Account.<br>
+    4. On completion, your backend exchanges the code for an access token and saves everything to Supabase.<br>
+    5. The saved account (with token) can be used by any Cloud API-compatible webhook integration.<br><br>
+    No backend yet? Click <strong>Simulate Demo Flow</strong> to preview the UI.
+  </div>
+
+  <!-- Results -->
+  <div class="results-panel" id="resultsPanel">
+    <div class="results-header">
+      <div class="status-dot" id="statusDot"></div>
+      <h3 id="resultsTitle">Processing...</h3>
+      <span class="ts" id="resultTs"></span>
+    </div>
+
+    <div class="cards-grid" id="cardsGrid"></div>
+
+    <div class="raw-section">
+      <div class="raw-toggle" id="rawToggle" onclick="toggleRaw()">
+        <span class="chevron">▶</span> Raw Response
+      </div>
+      <pre class="raw-json" id="rawJson"></pre>
+    </div>
+  </div>
+
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+  // ── Configuration ─────────────────────────────────────────────────────────
+  // Update this if you want a hardcoded backend URL, or leave blank to use the
+  // input field above.
+  const HARDCODED_BACKEND_URL = '';
+
+  // ── State ─────────────────────────────────────────────────────────────────
+  let capturedCode    = null;
+  let sessionData     = null;   // data from WA_EMBEDDED_SIGNUP message event
+
+  // ── Helpers ───────────────────────────────────────────────────────────────
+  const getBackendUrl = () =>
+    HARDCODED_BACKEND_URL || document.getElementById('backendUrl').value.trim().replace(/\/$/, '');
+
+  const getField = (id) => document.getElementById(id).value.trim();
+
+  // ── FB SDK Init ───────────────────────────────────────────────────────────
+  window.fbAsyncInit = function () {
+    const appId   = getField('appId');
+    const version = getField('apiVersion') || 'v25.0';
+    if (!appId) return;
+    FB.init({ appId, autoLogAppEvents: true, xfbml: true, version });
+  };
+
+  // ── Message event: capture WABA / phone / business IDs ───────────────────
+  window.addEventListener('message', (event) => {
+    if (!event.origin.endsWith('facebook.com')) return;
+    try {
+      const data = JSON.parse(event.data);
+      if (data.type === 'WA_EMBEDDED_SIGNUP') {
+        if (data.event === 'FINISH' || data.event?.startsWith('FINISH')) {
+          sessionData = data.data;
+          showResultsIntermediate(data.data);
+        } else if (data.event === 'CANCEL') {
+          showCancelResult(data.data);
+        }
+      }
+    } catch (e) { /* non-JSON, ignore */ }
+  });
+
+  // ── FB Login callback: receive code, call backend ─────────────────────────
+  const fbLoginCallback = (response) => { handleFbResponse(response); };
+  const handleFbResponse = async (response) => {
+    if (!response.authResponse) return;
+
+    capturedCode = response.authResponse.code;
+
+    if (!sessionData) {
+      showToast('⚠ Session data missing — try again', true);
+      return;
+    }
+
+    const backendUrl = getBackendUrl();
+    if (!backendUrl) {
+      showToast('⚠ Backend URL is not set. Fill in the Backend URL field.', true);
+      return;
+    }
+
+    setStep(4);
+    showToast('↻ Sending to server — exchanging token…');
+    setResultsHeader('pending', 'Saving to Supabase…');
+
+    try {
+      const res = await fetch(`${backendUrl}/api/onboard`, {
+        method:  'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          code:            capturedCode,
+          app_id:          getField('appId'),
+          app_secret:      getField('appSecret'),
+          config_id:       getField('configId'),
+          waba_id:         sessionData.waba_id,
+          phone_number_id: sessionData.phone_number_id,
+          business_id:     sessionData.business_id,
+        }),
+      });
+
+      const result = await res.json();
+
+      if (!res.ok) {
+        const errMsg = result.detail || 'Unknown server error';
+        setResultsHeader('error', 'Server Error');
+        showToast(`✗ ${errMsg}`, true);
+        document.getElementById('rawJson').innerHTML = syntaxHighlight(JSON.stringify(result, null, 2));
+        document.getElementById('rawJson').classList.add('visible');
+        return;
+      }
+
+      // Success
+      showFinalResults(result);
+
+    } catch (err) {
+      setResultsHeader('error', 'Network Error');
+      showToast(`✗ Network error: ${err.message}`, true);
+    }
+  };
+
+  // ── Launch Embedded Signup ────────────────────────────────────────────────
+  const launchWhatsAppSignup = () => {
+    const appId    = getField('appId');
+    const configId = getField('configId');
+    const version  = getField('apiVersion') || 'v25.0';
+
+    // Validate all required fields with clear messages
+    if (!getBackendUrl()) {
+      showToast('⚠ Please enter your Backend URL first', true);
+      document.getElementById('backendUrl').focus();
+      return;
+    }
+    if (!appId) {
+      showToast('⚠ Please enter your App ID', true);
+      document.getElementById('appId').focus();
+      return;
+    }
+    if (!configId) {
+      showToast('⚠ Please enter your Configuration ID', true);
+      document.getElementById('configId').focus();
+      return;
+    }
+    if (!getField('appSecret')) {
+      showToast('⚠ Please enter your App Secret', true);
+      document.getElementById('appSecret').focus();
+      return;
+    }
+
+    // Check Facebook SDK is loaded
+    if (typeof FB === 'undefined') {
+      showToast('⚠ Facebook SDK not loaded yet — please wait a moment and try again', true);
+      return;
+    }
+
+    // Re-init FB SDK with current App ID
+    try {
+      FB.init({ appId, autoLogAppEvents: true, xfbml: true, version });
+    } catch(e) {
+      showToast('⚠ Failed to initialise Facebook SDK: ' + e.message, true);
+      return;
+    }
+
+    setStep(2);
+    showToast('↻ Opening Facebook login popup…');
+
+    try {
+      FB.login((response) => { handleFbResponse(response); }, {
+        config_id:                      configId,
+        response_type:                  'code',
+        override_default_response_type: true,
+        extras: { setup: {} }
+      });
+    } catch(e) {
+      showToast('⚠ FB.login failed: ' + e.message, true);
+    }
+  };
+
+  // ── Demo simulation ───────────────────────────────────────────────────────
+  const simulateDemo = () => {
+    sessionData = {
+      phone_number_id: '106540352242922',
+      waba_id:         '524126980791429',
+      business_id:     '2729063490586005',
+    };
+    capturedCode = 'AQD-DEMO-' + Math.random().toString(36).substr(2, 24).toUpperCase();
+
+    const fakeResult = {
+      success:         true,
+      account_id:      'demo-uuid-' + Math.random().toString(36).substr(2, 8),
+      waba_id:         sessionData.waba_id,
+      phone_number_id: sessionData.phone_number_id,
+      access_token:    'EAAB' + Math.random().toString(36).substr(2, 32).toUpperCase(),
+    };
+
+    showFinalResults(fakeResult);
+    showToast('✓ Demo flow simulated — no real data was saved');
+  };
+
+  // ── UI helpers ────────────────────────────────────────────────────────────
+  const showResultsIntermediate = (data) => {
+    setStep(3);
+    const panel = document.getElementById('resultsPanel');
+    panel.classList.add('visible');
+    setResultsHeader('active', 'IDs Captured — Awaiting Token Exchange');
+
+    const grid = document.getElementById('cardsGrid');
+    grid.innerHTML = makeCards([
+      { label: 'WABA ID',         icon: '🏢', value: data.waba_id },
+      { label: 'Phone Number ID', icon: '📱', value: data.phone_number_id },
+      { label: 'Business ID',     icon: '💼', value: data.business_id },
+    ]);
+
+    panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  };
+
+  const showFinalResults = (result) => {
+    setStep(5);
+    setResultsHeader('active', 'Onboarding Complete — Saved to Supabase ✓');
+
+    const grid = document.getElementById('cardsGrid');
+    grid.innerHTML = makeCards([
+      { label: 'Account ID (Supabase)',  icon: '🗄️',  value: result.account_id },
+      { label: 'WABA ID',               icon: '🏢',  value: result.waba_id },
+      { label: 'Phone Number ID',        icon: '📱',  value: result.phone_number_id },
+      { label: 'Access Token',           icon: '🔑',  value: result.access_token },
+    ]);
+
+    const raw = document.getElementById('rawJson');
+    raw.innerHTML = syntaxHighlight(JSON.stringify(result, null, 2));
+
+    showToast('✓ Account saved to Supabase! Ready for Cloud API.');
+  };
+
+  const showCancelResult = (data) => {
+    const panel = document.getElementById('resultsPanel');
+    panel.classList.add('visible');
+    setResultsHeader('error', 'Flow Cancelled / Abandoned');
+
+    document.getElementById('cardsGrid').innerHTML = `
+      <div class="card" style="grid-column:1/-1;">
+        <div class="card-label">🚫 Abandoned at Step</div>
+        <div class="card-value">${data?.current_step || 'UNKNOWN'}</div>
+      </div>`;
+  };
+
+  const setResultsHeader = (dotState, title) => {
+    document.getElementById('statusDot').className = 'status-dot' +
+      (dotState === 'error' ? ' error' : dotState === 'pending' ? ' pending' : '');
+    document.getElementById('resultsTitle').textContent = title;
+    document.getElementById('resultTs').textContent = new Date().toLocaleTimeString();
+  };
+
+  const makeCards = (cards) =>
+    cards.map(c => `
+      <div class="card">
+        <div class="card-label">${c.icon} ${c.label}</div>
+        <div class="card-value ${c.value ? '' : 'empty'}">${c.value || '—'}</div>
+        <button class="copy-btn" onclick="copyVal('${c.value || ''}', this)">copy</button>
+      </div>`).join('');
+
+  const setStep = (n) => {
+    for (let i = 1; i <= 5; i++) {
+      document.getElementById('step' + i).className =
+        'step' + (i < n ? ' done' : i === n ? ' active' : '');
+    }
+  };
+
+  // ── Copy ──────────────────────────────────────────────────────────────────
+  const copyVal = (val, btn) => {
+    navigator.clipboard.writeText(val).then(() => {
+      if (btn) { btn.textContent = '✓'; btn.classList.add('copied');
+        setTimeout(() => { btn.textContent = 'copy'; btn.classList.remove('copied'); }, 1500); }
+      showToast('✓ Copied to clipboard');
+    });
+  };
+
+  // ── Raw JSON toggle ───────────────────────────────────────────────────────
+  const toggleRaw = () => {
+    document.getElementById('rawJson').classList.toggle('visible');
+    document.getElementById('rawToggle').classList.toggle('open');
+  };
+
+  // ── Toast ─────────────────────────────────────────────────────────────────
+  const showToast = (msg, isError = false) => {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.className = 'toast show' + (isError ? ' error' : '');
+    setTimeout(() => t.classList.remove('show'), 3200);
+  };
+
+  // ── Syntax highlighting ───────────────────────────────────────────────────
+  const syntaxHighlight = (json) =>
+    json.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+      .replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g, (m) => {
+        let cls = 'num';
+        if (/^"/.test(m)) cls = /:$/.test(m) ? 'key' : 'str';
+        return `<span class="${cls}">${m}</span>`;
+      });
+</script>
+</body>
+</html>
